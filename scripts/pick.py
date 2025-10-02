@@ -1,19 +1,20 @@
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import json,tushare as ts,pandas as pd,datetime as dt,numpy as np
+import json,pandas as pd,datetime as dt,numpy as np
+import akshare as ak
 from draw import temp_bar,plot_kline
 
-TOKEN   = os.getenv('TS_TOKEN')
-pro     = ts.pro_api(TOKEN)
 today   = dt.date.today()
 friday  = today if today.weekday()==4 else today-pd.Timedelta(days=today.weekday()-4)
 
 # 1. 严格选股逻辑
 ## 1. 基础池：剔除次新、ST
-basic = pro.stock_basic(exchange='', list_status='L', fields='ts_code,name,industry,market')
-st    = pro.namechange(stock_type='ST')['ts_code'].tolist()
-basic = basic[~basic.ts_code.isin(st)]
-basic = basic[basic.market.isin(['主板','创业板','科创板'])]   # 可选
+basic = ak.stock_info_a_code_name()          # ts_code,name
+indus = ak.stock_industry_cls()              # 行业分类
+basic = basic.merge(indus, on='name', how='left')
+basic.rename(columns={'code':'ts_code','c_name':'industry'},inplace=True)
+basic = basic[basic.ts_code.str.endswith(('SH','SZ'))]   # 只留A股
+basic['market'] = basic.ts_code.str[-2:].map({'SH':'主板','SZ':'主板'})
 
 ## 2. 取最近 5 年 PB 分位、最新财报、月线行情
 pb_df = pro.daily_basic(trade_date=friday.strftime('%Y%m%d'), fields='ts_code,pb')
