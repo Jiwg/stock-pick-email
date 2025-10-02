@@ -1,5 +1,7 @@
-import os,json,tushare as ts,pandas as pd,datetime as dt,numpy as np
-from scripts.draw import temp_bar,plot_kline
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import json,tushare as ts,pandas as pd,datetime as dt,numpy as np
+from draw import temp_bar,plot_kline
 
 TOKEN   = os.getenv('TS_TOKEN')
 pro     = ts.pro_api(TOKEN)
