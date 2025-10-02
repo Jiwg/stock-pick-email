@@ -19,7 +19,7 @@ def temp_bar(pro):
 def plot_kline(ts_code,name,end):
     """最近50周K线+50/200周均线+触发点高亮"""
     start = (end-pd.Timedelta(weeks=50)).strftime('%Y%m%d')
-    df = ts.pro_bar(ts_code=ts_code,asset='E',freq='W',start_date=start,end_date=end.strftime('%Y%m%d'))
+    df = ts.pro_bar(ts_code=ts_code,asset='E',freq='D',start_date=start,end_date=end.strftime('%Y%m%d'))
     df = df.sort_values('trade_date')
     df[['open','high','low','close','vol']] = df[['open','high','low','close','vol']].astype(float)
     df['ma50'] = df['close'].rolling(50).mean()

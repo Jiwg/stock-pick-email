@@ -15,7 +15,7 @@ if gone:
 body+="</body></html>"
 
 yagmail.register(os.getenv('MAIL_USER'),os.getenv('MAIL_PASS'))
-yag = yagmail.SMTP(os.getenv('MAIL_USER'),host='smtp.163.com',port=465)
+yag = yagmail.SMTP(os.getenv('MAIL_USER'),host='smtp.126.com',port=465)
 attachments=[os.getenv('TEMP_PIC')]+os.getenv('KLINE_PICS').split(',')
 yag.send(to=os.getenv('MAIL_TO'),subject=subject,contents=body,attachments=attachments)
 print('带图+增删提醒邮件已发送')
