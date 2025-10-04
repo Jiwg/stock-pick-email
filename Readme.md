@@ -8,7 +8,7 @@
 
 ## 🎯 项目用途
 
-1. 每周五收盘后自动运行 **“严格档低估值 + 底部放量 + 行业龙头”** 策略
+1. 每周五收盘后自动运行 **"严格档低估值 + 底部放量 + 行业龙头"** 策略
 2. 生成 **沪深300估值温度条** 与 **个股周K线缩略图**
 3. 对比上期信号，给出 **新增/剔除** 二次提醒
 4. 邮件推送全部结果（含图片附件）→ 手机/PC 一键查看
@@ -19,7 +19,7 @@
 
 | 模块 | 用途 |
 |------|------|
-| [tushare](https://tushare.pro) | A股行情/财务/行业数据 |
+| [akshare](https://github.com/akfamily/akshare) | A股行情/财务/行业数据 |
 | pandas | 数据清洗与筛选 |
 | matplotlib + mplfinance | 估值温度条 & 周K线图 |
 | yagmail | 一键发邮件（支持163/QQ/Gmail） |
@@ -37,7 +37,6 @@
 
 | Name | Value 说明 |
 |------|------------|
-| `TS_TOKEN` | tushare pro 用户token（[免费申请](https://tushare.pro/register)） |
 | `MAIL_USER` | 发件邮箱地址 |
 | `MAIL_PASS` | 邮箱 **SMTP授权码**（非登录密码！）<br>163/QQ：邮箱设置→SMTP→生成授权码 |
 | `MAIL_TO` | 收件人地址（可与自己相同） |
@@ -46,7 +45,16 @@
 仓库 → Actions → Weekly-Strict-Pick-plus → **Run workflow**  
 → 等待 1-2 分钟 → 查收邮件（含估值温度图 & K线）
 
-### ④ 自动运行
+### ④ 本地运行测试
+在本地环境中，可以使用以下命令直接运行选股脚本：
+```bash
+cd scripts
+python pick.py
+```
+
+注意：脚本需要网络连接以从akshare获取实时数据。
+
+### ⑤ 自动运行
 已设定 **每周五 18:00 (CN)** 自动触发，无需干预。
 
 ---
@@ -85,8 +93,8 @@ stock-pick-email/
 |------|------------|
 | 改为 **月频** | `cron: '0 10 1 * *'` 每月1号 |
 | 加入 **企业微信/飞书** 推送 | 在 `mail.py` 后追加 webhook 请求 |
-| 画 **日K/30分钟K** | 改 `plot_kline()` 的 `freq='D'` 或 `30min` |
-| 使用 **融资融券** 过滤 | 在 `pick.py` 加 `pro.margin_detail()` 判断 |
+| 画 **日K/30分钟K** | 改 `plot_kline()` 的 `period="daily"` 或 `period="1min"` |
+| 使用 **融资融券** 过滤 | 在 `pick.py` 加 `ak.stock_margin_detail_szse()` 判断 |
 
 ---
 
